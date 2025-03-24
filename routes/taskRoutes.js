@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/add', async (req, res) => {
     const { title, description } = req.body;
     try {
-        const task = new Task({ title, description });
+        const task = new Task({ title, description, user: req.user.userId });
         await task.save();
 
 
@@ -43,7 +43,7 @@ router.delete('/delete', async (req, res) => {
 
 router.get('/list', async (req, res) => {
     try {
-        const tasks = await Task.find({});
+        const tasks = await Task.find({ user: req.user.userId });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ message: error });
